@@ -21,34 +21,34 @@ class ITunesSearch extends BaseSearch {
   final Dio _client;
 
   /// The search term keyword(s)
-  String _term;
+  String? _term;
 
   /// If this property is not-null search results will be limited to this country
-  Country _country;
+  Country? _country;
 
   /// If this property is not-null search results will be limited to this genre
-  Genre _genre;
+  Genre? _genre;
 
   /// By default, searches will be performed against keyword(s) in [_term].
   /// Set this property to search against a different attribute.
-  Attribute _attribute;
+  Attribute? _attribute;
 
   /// Limit the number of results to [_limit]. If zero no limit will be applied
-  int _limit;
+  int? _limit;
 
   /// If non-null, the results will be limited to the language specified.
-  Language _language;
+  Language? _language;
 
   /// Set to true to disable the explicit filter.
-  bool _explicit;
+  bool? _explicit;
 
-  int _version;
+  int? _version;
 
   /// Connection timeout threshold in milliseconds
-  int timeout;
+  int? timeout;
 
   /// If this property is non-null, it will be prepended to the User Agent header.
-  String userAgent;
+  String? userAgent;
 
   ITunesSearch({
     this.timeout = 20000,
@@ -72,14 +72,14 @@ class ITunesSearch extends BaseSearch {
   /// value to search by a different attribute such as Author, genre etc.
   @override
   Future<SearchResult> search(
-      {String term,
-      Country country,
-      Attribute attribute,
-      Language language,
-      int limit,
-      int version = 0,
-      bool explicit = false,
-      Map<String, dynamic> queryParams = const {}}) async {
+      {String? term,
+      Country? country,
+      Attribute? attribute,
+      Language? language,
+      int? limit,
+      int? version = 0,
+      bool? explicit = false,
+      Map<String, dynamic>? queryParams = const {}}) async {
     _term = term;
     _country = country;
     _attribute = attribute;
@@ -89,7 +89,7 @@ class ITunesSearch extends BaseSearch {
     _explicit = explicit;
 
     try {
-      final response = await _client.get(_buildSearchUrl(queryParams));
+      final response = await _client.get(_buildSearchUrl(queryParams!));
 
       final results = json.decode(response.data);
 
@@ -112,10 +112,10 @@ class ITunesSearch extends BaseSearch {
   /// cache the results.
   @override
   Future<SearchResult> charts({
-    Country country = Country.UNITED_KINGDOM,
-    int limit = 20,
-    bool explicit = false,
-    Genre genre,
+    Country? country = Country.UNITED_KINGDOM,
+    int? limit = 20,
+    bool? explicit = false,
+    Genre? genre,
   }) async {
     _country = country;
     _limit = limit;
@@ -191,13 +191,13 @@ class ITunesSearch extends BaseSearch {
     final buf = StringBuffer(FEED_API_ENDPOINT);
 
     buf.write('/');
-    buf.write(_country.countryCode.toLowerCase());
+    buf.write(_country!.countryCode.toLowerCase());
 
     buf.write('/rss/toppodcasts/limit=');
     buf.write(_limit);
 
-    if (_genre != null && _genre.id != null) {
-      buf.write('/genre=${_genre.id}');
+    if (_genre != null && _genre!.id != null) {
+      buf.write('/genre=${_genre!.id}');
     }
 
     buf.write('/explicit=');
@@ -208,18 +208,18 @@ class ITunesSearch extends BaseSearch {
   }
 
   String _termParam() {
-    return term != null && term.isNotEmpty
-        ? '?term=' + Uri.encodeComponent(term)
+    return term != null && term!.isNotEmpty
+        ? '?term=' + Uri.encodeComponent(term!)
         : '';
   }
 
   String _countryParam() {
-    return _country != null ? '&country=' + _country.countryCode : '';
+    return _country != null ? '&country=' + _country!.countryCode : '';
   }
 
   String _attributeParam() {
     return _attribute != null
-        ? '&attribute=' + Uri.encodeComponent(_attribute.attribute)
+        ? '&attribute=' + Uri.encodeComponent(_attribute!.attribute)
         : '';
   }
 
@@ -228,7 +228,7 @@ class ITunesSearch extends BaseSearch {
   }
 
   String _languageParam() {
-    return _language != null ? '&language=' + _language.language : '';
+    return _language != null ? '&language=' + _language!.language : '';
   }
 
   String _versionParam() {
@@ -236,7 +236,7 @@ class ITunesSearch extends BaseSearch {
   }
 
   String _explicitParam() {
-    return _explicit ? '&explicit=Yes' : '&explicit=No';
+    return _explicit! ? '&explicit=Yes' : '&explicit=No';
   }
 
   String _standardParam() {
@@ -244,5 +244,5 @@ class ITunesSearch extends BaseSearch {
   }
 
   /// Returns the search term.
-  String get term => _term;
+  String? get term => _term;
 }

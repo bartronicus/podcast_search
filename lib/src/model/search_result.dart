@@ -29,16 +29,16 @@ const countTagMap = {
 /// received whilst attempting to fetch the podcast data.
 class SearchResult {
   /// The number of podcasts found.
-  final int resultCount;
+  final int? resultCount;
 
   /// True if the search was successful; false otherwise.
   final bool successful;
 
   /// The list of search results.
-  final List<Item> items;
+  final List<Item>? items;
 
   /// The last error.
-  final String lastError;
+  final String? lastError;
 
   /// The type of error.
   final ErrorType lastErrorType;
@@ -59,7 +59,7 @@ class SearchResult {
         items = [];
 
   factory SearchResult.fromJson(
-      {@required dynamic json, ResultType type = ResultType.itunes}) {
+      {required dynamic json, ResultType type = ResultType.itunes}) {
     /// Did we get an error message?
     if (json['errorMessage'] != null) {
       return SearchResult.fromError(json['errorMessage'], ErrorType.failed);

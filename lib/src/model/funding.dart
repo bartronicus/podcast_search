@@ -1,6 +1,6 @@
 class Funding {
-  final String url;
-  final String value;
+  final String? url;
+  final String? value;
 
   Funding({
     this.url,

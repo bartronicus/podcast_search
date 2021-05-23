@@ -6,38 +6,38 @@ import 'package:podcast_search/src/model/chapters.dart';
 /// A class representing an individual episode.
 class Episode {
   /// The episode unique identifier.
-  final String guid;
+  final String? guid;
 
   /// The episode title.
-  final String title;
+  final String? title;
 
   /// The episode description.
-  final String description;
+  final String? description;
 
   /// The episode URL.
-  String link;
+  String? link;
 
   /// Publication date of the episode.
-  final DateTime publicationDate;
+  final DateTime? publicationDate;
 
   /// Media fields
-  String contentUrl;
+  String? contentUrl;
 
   // iTunes specific fields
   /// Episode author.
-  String author;
+  String? author;
 
   /// Season
-  int season;
+  int? season;
 
   /// Episode number
-  int episode;
+  int? episode;
 
   /// Length of the episode as a [Duration].
-  final Duration duration;
+  final Duration? duration;
 
   /// Episode chapters for feeds that support PodcastIndex
-  final Chapters chapters;
+  final Chapters? chapters;
 
   Episode({
     this.guid,

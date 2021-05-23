@@ -15,34 +15,34 @@ import 'package:podcast_search/src/search/providers/providers.dart';
 /// and stored as Item instances and wrapped in a SearchResult.
 class Search {
   /// The search term keyword(s)
-  String _term;
+  String? _term;
 
   /// If this property is not-null search results will be limited to this country
-  Country _country;
+  Country? _country;
 
   /// If this property is not-null search results will be limited to this genre
-  Genre _genre;
+  Genre? _genre;
 
   /// By default, searches will be performed against keyword(s) in [_term].
   /// Set this property to search against a different attribute.
-  Attribute _attribute;
+  Attribute? _attribute;
 
   /// Limit the number of results to [_limit]. If zero no limit will be applied
-  int _limit;
+  int? _limit;
 
   /// If non-null, the results will be limited to the language specified.
-  Language _language;
+  Language? _language;
 
   /// Set to true to disable the explicit filter.
-  bool _explicit;
+  bool? _explicit;
 
-  int _version;
+  int? _version;
 
   /// Connection timeout threshold in milliseconds
-  int timeout;
+  int? timeout;
 
   /// If this property is non-null, it will be prepended to the User Agent header.
-  String userAgent;
+  String? userAgent;
 
   Search({this.userAgent});
 
@@ -52,10 +52,10 @@ class Search {
   /// value to search by a different attribute such as Author, genre etc.
   Future<SearchResult> search(String term,
       {SearchProvider searchProvider = const ITunesProvider(),
-      Country country,
-      Attribute attribute,
-      Language language,
-      int limit,
+      Country? country,
+      Attribute? attribute,
+      Language? language,
+      int? limit,
       int version = 0,
       bool explicit = false,
       Map<String, dynamic> queryParams = const {}}) async {
@@ -75,7 +75,7 @@ class Search {
         : PodcastIndexSearch(
             userAgent: userAgent,
             timeout: timeout,
-            podcastIndexProvider: searchProvider,
+            podcastIndexProvider: searchProvider as PodcastIndexProvider?,
           );
 
     return s.search(
@@ -103,7 +103,7 @@ class Search {
     Country country = Country.UNITED_KINGDOM,
     int limit = 20,
     bool explicit = false,
-    Genre genre,
+    Genre? genre,
     Map<String, dynamic> queryParams = const {},
   }) async {
     _country = country;
@@ -136,5 +136,5 @@ class Search {
   }
 
   /// Returns the search term.
-  String get term => _term;
+  String? get term => _term;
 }

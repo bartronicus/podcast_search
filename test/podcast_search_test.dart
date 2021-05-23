@@ -6,7 +6,7 @@ import 'package:test/test.dart';
 
 void main() {
   group('Baseline search test', () {
-    Search search;
+    late Search search;
 
     setUp(() {
       search = Search();
@@ -19,7 +19,7 @@ void main() {
               secret: 'KZ2uy4upvq4t3e\$m\$3r2TeFS2fEpFTAaF92xcNdX'),
           queryParams: {'val': 'lightning'});
 
-      expect(result.resultCount > 0, true);
+      expect(result.resultCount! > 0, true);
     });
 
     test('Max one result test', () async {

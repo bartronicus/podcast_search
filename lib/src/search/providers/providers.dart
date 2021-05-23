@@ -24,7 +24,7 @@ class PodcastIndexProvider extends SearchProvider {
   final String secret;
 
   PodcastIndexProvider({
-    @required this.key,
-    @required this.secret,
+    required this.key,
+    required this.secret,
   });
 }

@@ -22,31 +22,31 @@ class PodcastIndexSearch extends BaseSearch {
   static String TRENDING_API_ENDPOINT =
       'https://api.podcastindex.org/api/1.0/podcasts/trending';
 
-  PodcastIndexProvider podcastIndexProvider;
+  PodcastIndexProvider? podcastIndexProvider;
 
-  Dio _client;
+  late Dio _client;
 
   /// The search term keyword(s)
-  String _term;
+  String? _term;
 
   /// Limit the number of results to [_limit]. If zero no limit will be applied
-  int _limit;
+  int? _limit;
 
   /// Set to true to disable the explicit filter.
-  bool _explicit;
+  bool? _explicit;
 
   /// Connection timeout threshold in milliseconds
-  int timeout;
+  int? timeout;
 
   /// If this property is non-null, it will be prepended to the User Agent header.
-  String userAgent;
+  String? userAgent;
 
   /// Contains the type of error returning from the search. If no error occurred it
   /// will be set to [ErrorType.none].
   final ErrorType _lastErrorType = ErrorType.none;
 
   /// If an error occurs, this will contain a user-readable error message.
-  String _lastError;
+  String? _lastError;
 
   PodcastIndexSearch({
     this.timeout = 20000,
@@ -55,8 +55,8 @@ class PodcastIndexSearch extends BaseSearch {
   }) {
     var unixTime = (DateTime.now().millisecondsSinceEpoch / 1000).round();
     var newUnixTime = unixTime.toString();
-    var firstChunk = utf8.encode(podcastIndexProvider.key);
-    var secondChunk = utf8.encode(podcastIndexProvider.secret);
+    var firstChunk = utf8.encode(podcastIndexProvider!.key);
+    var secondChunk = utf8.encode(podcastIndexProvider!.secret);
     var thirdChunk = utf8.encode(newUnixTime);
 
     var output = AccumulatorSink<Digest>();
@@ -74,9 +74,9 @@ class PodcastIndexSearch extends BaseSearch {
         responseType: ResponseType.json,
         headers: {
           'X-Auth-Date': newUnixTime,
-          'X-Auth-Key': podcastIndexProvider.key,
+          'X-Auth-Key': podcastIndexProvider!.key,
           'Authorization': digest.toString(),
-          'User-Agent': userAgent == null || userAgent.isEmpty
+          'User-Agent': userAgent == null || userAgent!.isEmpty
               ? '$podcastSearchAgent'
               : '${userAgent}',
         },
@@ -90,20 +90,20 @@ class PodcastIndexSearch extends BaseSearch {
   /// value to search by a different attribute such as Author, genre etc.
   @override
   Future<SearchResult> search(
-      {String term,
-      Country country,
-      Attribute attribute,
-      Language language,
-      int limit,
-      int version = 0,
-      bool explicit = false,
-      Map<String, dynamic> queryParams = const {}}) async {
+      {String? term,
+      Country? country,
+      Attribute? attribute,
+      Language? language,
+      int? limit,
+      int? version = 0,
+      bool? explicit = false,
+      Map<String, dynamic>? queryParams = const {}}) async {
     _term = term;
     _limit = limit;
     _explicit = explicit;
 
     try {
-      var response = await _client.get(_buildSearchUrl(queryParams));
+      var response = await _client.get(_buildSearchUrl(queryParams!));
 
       return SearchResult.fromJson(
           json: response.data, type: ResultType.podcastIndex);
@@ -125,10 +125,10 @@ class PodcastIndexSearch extends BaseSearch {
   /// cache the results.
   @override
   Future<SearchResult> charts(
-      {Country country = Country.UNITED_KINGDOM,
-      int limit = 20,
-      bool explicit = false,
-      Genre genre,
+      {Country? country = Country.UNITED_KINGDOM,
+      int? limit = 20,
+      bool? explicit = false,
+      Genre? genre,
       Map<String, dynamic> queryParams = const {}}) async {
     try {
       var response = await _client.get(TRENDING_API_ENDPOINT,
@@ -161,8 +161,8 @@ class PodcastIndexSearch extends BaseSearch {
   }
 
   String _termParam() {
-    return term != null && term.isNotEmpty
-        ? '/byterm?q=' + Uri.encodeComponent(term)
+    return term != null && term!.isNotEmpty
+        ? '/byterm?q=' + Uri.encodeComponent(term!)
         : '';
   }
 
@@ -171,9 +171,9 @@ class PodcastIndexSearch extends BaseSearch {
   }
 
   String _explicitParam() {
-    return _explicit ? '&clean' : '';
+    return _explicit! ? '&clean' : '';
   }
 
   /// Returns the search term.
-  String get term => _term;
+  String? get term => _term;
 }

@@ -12,7 +12,7 @@ void main() async {
   });
 
   /// Parse the first podcast.
-  var podcast = await Podcast.loadFeed(url: results.items[0].feedUrl);
+  var podcast = await Podcast.loadFeed(url: results.items![0].feedUrl!);
 
   /// Display episode titles.
   podcast.episodes?.forEach((episode) {
